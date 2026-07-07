@@ -1,0 +1,16 @@
+:root{
+  --bg:#111315;
+  --panel:#1b1e23;
+  --border:#2b3037;
+
+  --green:#20c863;
+  --red:#f53d4a;
+  --yellow:#ffd54a;
+
+  --text:#ffffff;
+  --subtext:#9ca3af;
+
+  --radius:20px;
+
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}

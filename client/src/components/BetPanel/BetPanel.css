@@ -1,0 +1,166 @@
+.bet-panel{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    padding:10px;
+    gap:10px;
+}
+
+/* STACK like Aviator */
+.bets-stack{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    flex:1;
+}
+
+/* CARD MAIN ROW STYLE (Aviator style) */
+.bet-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    background:#14161d;
+    border-radius:14px;
+    padding:10px;
+
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+/* LEFT SIDE (controls) */
+.bet-left{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    width:65%;
+}
+
+/* HEADER */
+.bet-header{
+    font-size:11px;
+    color:#777;
+}
+
+/* AMOUNT ROW */
+.amount-box{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.amount-box button{
+    width:28px;
+    height:28px;
+    border-radius:6px;
+    border:none;
+    background:#222838;
+    color:white;
+}
+
+.amount-box input{
+    width:80px;
+    background:#0e1118;
+    border:none;
+    color:white;
+    text-align:center;
+    font-size:14px;
+    border-radius:6px;
+}
+
+/* QUICK BUTTONS SMALL */
+.quick-buttons{
+    display:flex;
+    gap:5px;
+}
+
+.quick-buttons button{
+    height:22px;
+    font-size:10px;
+    padding:0 6px;
+    border-radius:6px;
+    border:1px solid #2a2f3a;
+    background:#151922;
+    color:#aaa;
+}
+
+/* RIGHT SIDE BUTTON (BIG GREEN LIKE IMAGE) */
+.bet-btn{
+    width:130px;
+    height:70px;
+
+    border:none;
+    border-radius:12px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(180deg,#2bff88,#19b85a);
+    color:black;
+
+    font-weight:800;
+}
+
+/* CASHOUT */
+.bet-btn.cashout{
+    background:linear-gradient(180deg,#ffb300,#ff6a00);
+    color:white;
+}
+
+/* DISABLED */
+.bet-btn.disabled{
+    background:#333;
+    color:#777;
+}
+
+/* TEXT */
+.bet-title{
+    font-size:11px;
+}
+
+.bet-amount{
+    font-size:14px;
+}
+
+/* MOBILE FIX */
+@media(max-width:768px){
+
+    .bet-btn{
+        width:110px;
+        height:65px;
+    }
+
+    .amount-box input{
+        width:70px;
+    }
+
+    .quick-buttons button{
+        font-size:9px;
+    }
+}
+
+.bet-btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+.bet-btn {
+    transition: all 0.15s ease;
+}
+
+.bet-btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+
+.bet-error {
+    color: red;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 6px;
+    text-align: center;
+}

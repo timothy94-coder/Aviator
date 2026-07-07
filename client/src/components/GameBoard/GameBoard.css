@@ -1,0 +1,157 @@
+.game-board {
+
+    width: 100%;
+
+    height: 302px;
+
+
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+
+
+    overflow: hidden;
+
+    background: #0b0b
+
+}
+
+.game-canvas {
+
+    position: relative;
+
+
+
+     width: min(980px, 100%);
+    height: 301px;
+
+
+    overflow: hidden;
+
+
+
+    border-radius: 22px;
+
+
+
+    background: #0d0d12;
+
+
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+
+
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+
+}
+
+/* 🌪️ SPIRAL BACKGROUND */
+.sky-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 140%;
+    height: 140%;
+
+    transform: translate(-50%, -50%) rotate(0deg);
+
+    opacity: 0.35;
+    filter: brightness(1.5) contrast(1.2);
+
+    animation: spin 80s linear infinite;
+
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 📈 GRAPH LAYER */
+.live-graph {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+/* ✈️ PLANE */
+.plane {
+    position: absolute;
+    z-index: 3;
+    transition: transform 1s ease, opacity 1s ease;
+
+}
+
+/* 🔥 CENTER MULTIPLIER */
+.multiplier {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    pointer-events: none;
+}
+
+.multiplier span {
+    font-size: 28px;
+    color: #4dff88;
+}
+
+.multiplier h1 {
+    font-size: 90px;
+    color: white;
+}
+
+
+
+.flight-zone.flying .plane {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+}
+
+/* 💥 crash animation */
+.flight-zone.crashed .plane {
+    transform: translate(500px, -300px) rotate(80deg);
+    opacity: 0;
+}
+
+
+
+.multiplier-value {
+    font-size: 90px;
+    color: white;
+    transition: 0.3s ease;
+}
+
+/* when flying */
+.multiplier-value.flying {
+    color: white;
+}
+
+/* when crashed */
+.multiplier-value.crashed {
+    color: #ff3b3b;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+}
+
+
+.countdown-logo {
+    height: 80px;
+    animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}

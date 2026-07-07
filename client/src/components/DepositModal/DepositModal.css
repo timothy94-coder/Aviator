@@ -1,0 +1,140 @@
+.deposit-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 10, 20, 0.9);
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* HEADER */
+.deposit-header {
+    width: 340px;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.deposit-header h2 {
+    font-size: 18px;
+}
+
+/* CARD SMALLER */
+.deposit-card.small {
+    width: 340px;
+    background: #0f1722;
+    border-radius: 14px;
+    padding: 16px;
+    border: 1px solid #1e293b;
+    color: white;
+}
+
+/* ACCOUNT BAR */
+.account-bar {
+    background: #16a34a;
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+/* SUBTEXT */
+.subtext {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* INPUT */
+.deposit-card input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #1e293b;
+    background: #0b1220;
+    color: white;
+}
+
+/* AMOUNTS */
+.amount-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.amt-btn {
+    padding: 10px;
+    border-radius: 10px;
+    background: #111827;
+    border: 1px solid #1e293b;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.amt-btn.active {
+    background: #22c55e;
+    border-color: #22c55e;
+}
+
+/* MAIN BUTTON */
+.deposit-btn-main {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* AUTH */
+.auth-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-box {
+    width: 300px;
+    background: #0f1722;
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px solid #1e293b;
+    color: white;
+}
+
+.auth-box input {
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #1e293b;
+    background: #0b1220;
+    color: white;
+}
+
+.auth-box button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #22c55e;
+    color: white;
+    font-weight: bold;
+}
+
+.auth-box .cancel {
+    background: #334155;
+}

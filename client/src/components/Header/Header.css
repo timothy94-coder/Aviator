@@ -1,0 +1,579 @@
+.header{
+    height:35px;
+    padding:0 14px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:#12151d;
+    border-bottom:1px solid #262c38;
+}
+
+/* ---------- LOGO ---------- */
+
+.logo{
+    display:flex;
+    align-items:center;
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:-0.2px;
+}
+
+.logo-red{
+    color:#ff4b4b;
+}
+
+.logo-white{
+    color:#fff;
+}
+/* ---------- DEPOSIT ---------- */
+
+.deposit-btn{
+
+    height:25px;
+
+    padding:0 18px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:#1db954;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    box-shadow:0 0 10px rgba(29,185,84,.35);
+}
+
+.plus{
+    font-size:22px;
+    line-height:1;
+}
+
+.plus{
+
+    font-size:22px;
+    font-weight:bold;
+
+}
+
+/* ---------- RIGHT ---------- */
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+/* sound */
+
+.sound-btn{
+
+    background:none;
+    border:none;
+
+    color:white;
+
+    font-size:22px;
+
+    padding:0;
+}
+
+/* wallet */
+
+.wallet{
+
+    display:flex;
+    align-items:baseline;
+    gap:4px;
+
+    background:none;
+    border:none;
+    padding:0;
+}
+
+.balance-value{
+
+    color:#3cff66;
+
+    font-size:16px;
+
+    font-weight:600;
+}
+
+.balance-currency{
+
+    color:#bdbdbd;
+
+    font-size:14px;
+
+    font-weight:400;
+}
+
+/* menu */
+
+.menu-btn{
+
+    background:none;
+    border:none;
+
+    color:white;
+
+    font-size:20px;
+
+    padding:0;
+}
+.logo img {
+    height: 40px;
+    object-fit: contain;
+}
+
+/* ===== OVERLAY (GLASS DARK BLUR) ===== */
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s ease;
+    z-index: 80;
+}
+
+.menu-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ===== DRAWER ===== */
+.side-drawer {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 320px;
+    height: 100%;
+    background: linear-gradient(180deg, #ffffff, #f7f9fc);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+    transition: 0.3s cubic-bezier(.4,0,.2,1);
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.side-drawer.open {
+    right: 0;
+}
+
+/* ===== HEADER PROFILE ===== */
+.drawer-header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 18px;
+    background: linear-gradient(135deg, #1a7a3a, #2d9e52);
+    color: white;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.drawer-header h4 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.drawer-header p {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+/* ===== BALANCE CARD ===== */
+.drawer-balance {
+    margin: 14px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border: 1px solid #eef2f0;
+}
+
+.drawer-balance span {
+    font-size: 12px;
+    color: #777;
+}
+
+.drawer-balance h2 {
+    margin: 4px 0 0;
+    font-size: 20px;
+    color: #1a7a3a;
+}
+
+/* ===== SECTIONS ===== */
+.drawer-section {
+    padding: 10px 14px;
+}
+
+.section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9aa3a0;
+    margin: 10px 0;
+    letter-spacing: 1px;
+}
+
+/* ===== ITEMS ===== */
+.drawer-item {
+    width: 100%;
+    padding: 12px 12px;
+    margin-bottom: 8px;
+    border: none;
+    border-radius: 12px;
+    background: #f6f8f7;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.drawer-item:hover {
+    transform: translateX(4px);
+    background: #eaf5ee;
+}
+
+/* highlight deposit */
+.drawer-item.highlight {
+    background: #e6f7ec;
+    color: #1a7a3a;
+    font-weight: 600;
+}
+
+/* danger logout */
+.drawer-item.danger {
+    background: #ffecec;
+    color: #c0392b;
+}
+
+.drawer-item.danger:hover {
+    background: #ffd6d6;
+}
+
+/* ================= AUTH MODAL ================= */
+
+.simple-modal {
+
+    position: fixed;
+    inset: 0;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    backdrop-filter: blur(8px);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    z-index:200;
+
+}
+
+
+
+/* CARD */
+
+.simple-modal .modal-box {
+
+    width:340px;
+
+    padding:28px;
+
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #181d27,
+            #10141c
+        );
+
+    border:1px solid #2b3342;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.5);
+
+    color:white;
+
+    animation:
+        modalIn .25s ease;
+
+}
+
+
+
+
+@keyframes modalIn {
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(20px)
+            scale(.95);
+
+    }
+
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+
+/* TITLE */
+
+.modal-box h3 {
+
+    margin:0 0 20px;
+
+    font-size:24px;
+
+    font-weight:800;
+
+    text-align:center;
+
+    color:white;
+
+}
+
+
+
+
+/* INPUTS */
+
+.modal-box input {
+
+    width:100%;
+
+    height:46px;
+
+    margin-bottom:12px;
+
+    padding:0 15px;
+
+    border-radius:12px;
+
+    border:1px solid #30394a;
+
+    outline:none;
+
+    background:#0d1118;
+
+    color:white;
+
+    font-size:15px;
+
+    box-sizing:border-box;
+
+}
+
+
+
+.modal-box input::placeholder {
+
+    color:#8b93a3;
+
+}
+
+
+
+.modal-box input:focus {
+
+    border-color:#1db954;
+
+    box-shadow:
+        0 0 0 3px rgba(29,185,84,.15);
+
+}
+
+
+
+
+/* ERROR */
+
+.modal-box p {
+
+    font-size:13px;
+
+    margin:10px 0;
+
+}
+
+
+
+/* MAIN BUTTON */
+
+.modal-box button {
+
+    width:100%;
+
+    height:46px;
+
+    margin-top:10px;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    transition:.2s;
+
+}
+
+
+
+.modal-box button:first-of-type {
+
+    background:#1db954;
+
+    color:white;
+
+    box-shadow:
+        0 8px 20px rgba(29,185,84,.25);
+
+}
+
+
+
+.modal-box button:first-of-type:hover {
+
+    transform:translateY(-2px);
+
+}
+
+
+
+/* SWITCH ACCOUNT BUTTON */
+
+.modal-box button:nth-of-type(2){
+
+    background:#232a36;
+
+    color:#d9dce2;
+
+}
+
+
+
+
+/* CLOSE BUTTON */
+
+.modal-box button:last-child {
+
+    background:transparent;
+
+    color:#8f98a8;
+
+    border:1px solid #30394a;
+
+}
+
+
+
+.modal-box button:last-child:hover {
+
+    color:white;
+
+    background:#1c222d;
+
+}
+
+
+.withdraw-info {
+
+    background:#181818;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    margin-bottom:10px;
+
+}
+
+
+.withdraw-info p {
+
+    margin:0;
+
+    font-size:12px;
+
+    color:#aaa;
+
+}
+
+
+.withdraw-info strong {
+
+    display:block;
+
+    margin-top:5px;
+
+    font-size:16px;
+
+    color:white;
+
+}
+
+
+
+.info-modal input {
+
+    width:100%;
+
+    padding:12px;
+
+    margin-top:12px;
+
+    background:#222;
+
+    border:1px solid #333;
+
+    border-radius:10px;
+
+    color:white;
+
+}

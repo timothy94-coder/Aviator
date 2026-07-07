@@ -1,0 +1,15 @@
+.history{
+
+height:60px;
+
+display:flex;
+
+align-items:center;
+
+padding-left:20px;
+
+background:#151515;
+
+border-bottom:1px solid #242424;
+
+}

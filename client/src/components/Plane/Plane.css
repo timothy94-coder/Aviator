@@ -1,0 +1,38 @@
+.plane {
+    position: absolute;
+
+    width: 120px;
+    height: 70px;
+
+    background-image: url("../../assets/images/plane.png");
+    background-repeat: no-repeat;
+    background-size: 200% 100%;
+    animation: flyAnim 0.12s steps(2) infinite;
+
+    pointer-events: none;
+        will-change: left, top;
+
+
+    z-index: 30;
+
+    filter: drop-shadow(0 0 12px rgba(255, 50, 50, 0.8));
+
+    /* 🔥 IMPORTANT: anchor is NOSE now */
+    transform-origin: 0% 50%;
+}
+
+.flight-zone {
+    position: absolute;
+    inset: 20px;   /* 🔥 THIS is the safety margin */
+    z-index: 1;
+}
+
+/* sprite frame switch (KEEP EXACT SAME) */
+@keyframes flyAnim {
+    from {
+        background-position: 0% 0%;
+    }
+    to {
+        background-position: 200% 0%;
+    }
+}
