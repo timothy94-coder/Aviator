@@ -46,12 +46,12 @@ let forcedCrashPoints = [];
 let schedules = [
     {
         // Nairobi time (EAT UTC+3)
-        time: new Date("2026-07-07T16:00:00+03:00"),
+        time: new Date("2026-07-08T16:00:00+03:00"),
         rounds: 4,
         used: false
     },
     {
-        time: new Date("2026-07-08T03:15:00+03:00"),
+        time: new Date("2026-07-09T03:15:00+03:00"),
         rounds: 4,
         used: false
     },
@@ -140,42 +140,59 @@ function randomCrashPoint() {
     MANY LOW / FEW HIGH
     ==============================
     */
+/*
+==============================
+NORMAL CRASH DISTRIBUTION
+MOST LOW / FEW HIGH
+==============================
+*/
 
-    const r = Math.random();
+const r = Math.random();
 
-    let crash;
-
-
-    if (r < 0.55) {
-
-        // Most rounds: 1.00x - 3.00x
-        crash = Math.random() * 2 + 1;
-
-    }
-
-    else if (r < 0.85) {
-
-        // Medium rounds: 3.00x - 8.00x
-        crash = Math.random() * 5 + 3;
-
-    }
-
-    else if (r < 0.97) {
-
-        // Rare rounds: 8.00x - 25.00x
-        crash = Math.random() * 17 + 8;
-
-    }
-
-    else {
-
-        // Very rare: 25x+
-        crash = Math.random() * 75 + 25;
-
-    }
+let crash;
 
 
-    return Number(crash.toFixed(2));
+if (r < 0.70) {
+
+    // Very common:
+    // 1.00x - 3.50x
+
+    crash = Math.random() * 2.5 + 1;
+
+}
+
+
+else if (r < 0.90) {
+
+    // Common:
+    // 3.50x - 10x
+
+    crash = Math.random() * 6.5 + 3.5;
+
+}
+
+
+else if (r < 0.98) {
+
+    // Rare:
+    // 10x - 30x
+
+    crash = Math.random() * 20 + 10;
+
+}
+
+
+else {
+
+    // Very rare:
+    // 30x - 100x
+
+    crash = Math.random() * 70 + 30;
+
+}
+
+
+return Number(crash.toFixed(2));
 
 }
 
