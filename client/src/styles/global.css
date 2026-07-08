@@ -144,7 +144,9 @@ height:auto;
 
 .center-panel{
 
-min-height:65vh;
+min-height:auto;
+    gap:10px;
+
 
 }
 
@@ -152,7 +154,7 @@ min-height:65vh;
 
 height:auto;
 
-min-height:260px;
+min-height:0px;
 
 }
 
