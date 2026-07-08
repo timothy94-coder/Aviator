@@ -29,7 +29,7 @@ export function SoundProvider({ children }) {
 
     if (aviatorRef.current) {
       aviatorRef.current.loop = true;
-      aviatorRef.current.volume = 0.5;
+      aviatorRef.current.volume = 1;
       aviatorRef.current.play().catch(() => {});
     }
   };
@@ -48,6 +48,7 @@ export function SoundProvider({ children }) {
 
     if (crashRef.current) {
       crashRef.current.currentTime = 0;
+      crashRef.current.volume = 1;
       crashRef.current.play().catch(() => {});
     }
   };
