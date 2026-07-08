@@ -246,48 +246,36 @@ function randomCrashPoint(){
     */
 
 
-    const r = Math.random();
+const r = Math.random();
+
+let crash;
 
 
-    let crash;
+if(r < 0.90){
+
+    // 90% low rounds
+    crash = Math.random() * 4 + 1;
+
+}
 
 
+else if(r < 0.98){
 
-    if(r < 0.90){
+    // 8% medium
+    crash = Math.random() * 15 + 5;
 
-
-        crash =
-            Math.random() * 9 + 1;
-
-
-    }
+}
 
 
-    else if(r < 0.98){
+else{
+
+    // 2% high
+    crash = Math.random() * 50 + 20;
+
+}
 
 
-        crash =
-            Math.random() * 20 + 10;
-
-
-    }
-
-
-    else{
-
-
-        crash =
-            Math.random() * 70 + 30;
-
-
-    }
-
-
-
-
-    return Number(
-        crash.toFixed(2)
-    );
+return Number(crash.toFixed(2));
 
 }
 
