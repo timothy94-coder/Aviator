@@ -17,122 +17,199 @@ export function SoundProvider({ children }) {
   const soundState = useRef(true);
 
 
-  const aviatorRef = useRef(null);
-  const crashRef = useRef(null);
+  const engineAudio = useRef(null);
+  const crashAudio = useRef(null);
 
 
 
-  // 🔊 Toggle sound
+  // create engine sound when needed
+  const createEngine = () => {
+
+    if (!engineAudio.current) {
+
+      engineAudio.current = new Audio(
+        "/sounds/aviator.mp3"
+      );
+
+      engineAudio.current.loop = true;
+      engineAudio.current.volume = 1;
+
+    }
+
+    return engineAudio.current;
+
+  };
+
+
+
+  const createCrash = () => {
+
+    if (!crashAudio.current) {
+
+      crashAudio.current = new Audio(
+        "/sounds/crash.mp3"
+      );
+
+      crashAudio.current.volume = 1;
+
+    }
+
+    return crashAudio.current;
+
+  };
+
+
+
+
   const toggleSound = () => {
+
 
     const next = !soundState.current;
 
     soundState.current = next;
+
     setSoundOn(next);
 
 
-    if (!next && aviatorRef.current) {
 
-      aviatorRef.current.pause();
+    if (!next) {
+
+
+      if (engineAudio.current) {
+
+        engineAudio.current.pause();
+
+        engineAudio.current.currentTime = 0;
+
+      }
+
+
+      if (crashAudio.current) {
+
+        crashAudio.current.pause();
+
+        crashAudio.current.currentTime = 0;
+
+      }
+
 
     }
+
 
   };
 
 
 
-  // ✈️ Engine start
-  const playEngine = () => {
+
+
+  const playEngine = async () => {
 
 
     if (!soundState.current) return;
 
 
-    const audio = aviatorRef.current;
 
-
-    if (!audio) return;
-
-
-
-    audio.loop = true;
-    audio.volume = 1;
+    const audio = createEngine();
 
 
 
-    // prevent restarting already playing sound
-    if (audio.paused) {
-
-      audio.play()
-      .catch(err => {
-
-        console.log(
-          "Engine sound blocked:",
-          err
-        );
-
-      });
-
-    }
-
-  };
+    try {
 
 
-
-  // 🛑 Engine stop
-  const stopEngine = () => {
+      if (audio.paused) {
 
 
-    const audio = aviatorRef.current;
+        audio.currentTime = 0;
 
 
-    if (!audio) return;
+        await audio.play();
 
 
-    audio.pause();
-
-    // IMPORTANT:
-    // Do not reset currentTime here.
-    // Resetting caused next rounds to lose sound.
-
-  };
+      }
 
 
+    } catch(err) {
 
-  // 💥 Crash sound
-  const playCrash = () => {
-
-
-    if (!soundState.current) return;
-
-
-    const audio = crashRef.current;
-
-
-    if (!audio) return;
-
-
-
-    audio.pause();
-
-    audio.currentTime = 0;
-
-    audio.volume = 1;
-
-
-
-    audio.play()
-    .catch(err => {
 
       console.log(
-        "Crash sound blocked:",
+        "Engine sound error:",
         err
       );
 
-    });
+
+    }
 
 
   };
+
+
+
+
+
+
+  const stopEngine = () => {
+
+
+    if (engineAudio.current) {
+
+
+      engineAudio.current.pause();
+
+
+      // don't reset here
+      // keeps browser audio pipeline alive
+
+
+    }
+
+
+  };
+
+
+
+
+
+
+
+  const playCrash = async () => {
+
+
+    if (!soundState.current) return;
+
+
+
+    const audio = createCrash();
+
+
+
+    try {
+
+
+      audio.pause();
+
+      audio.currentTime = 0;
+
+
+      await audio.play();
+
+
+
+    } catch(err) {
+
+
+      console.log(
+        "Crash sound error:",
+        err
+      );
+
+
+    }
+
+
+  };
+
+
+
 
 
 
@@ -150,23 +227,7 @@ export function SoundProvider({ children }) {
 
     >
 
-
-      <audio
-        ref={aviatorRef}
-        src="/sounds/aviator.mp3"
-        preload="auto"
-      />
-
-
-      <audio
-        ref={crashRef}
-        src="/sounds/crash.mp3"
-        preload="auto"
-      />
-
-
       {children}
-
 
     </SoundContext.Provider>
 
