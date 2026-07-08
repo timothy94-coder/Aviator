@@ -2,20 +2,21 @@ import React, {
   createContext,
   useContext,
   useRef,
-  useState,
-  useEffect
+  useState
 } from "react";
 
 
 const SoundContext = createContext(null);
 
 
+
 export function SoundProvider({ children }) {
 
 
-  const [soundOn, setSoundOn] = useState(true);
+  // 🔇 OFF BY DEFAULT
+  const [soundOn, setSoundOn] = useState(false);
 
-  const soundState = useRef(true);
+  const soundState = useRef(false);
 
 
   const aviatorRef = useRef(null);
@@ -23,41 +24,47 @@ export function SoundProvider({ children }) {
 
 
 
-  useEffect(() => {
-
-    soundState.current = soundOn;
-
-  }, [soundOn]);
-
-
-
-
   const toggleSound = () => {
 
 
-    setSoundOn(prev => {
+    const next = !soundState.current;
 
 
-      const next = !prev;
-
-
-      soundState.current = next;
+    soundState.current = next;
+    setSoundOn(next);
 
 
 
-      if (!next && aviatorRef.current) {
+    if (!next) {
+
+
+      if (aviatorRef.current) {
 
         aviatorRef.current.pause();
-
         aviatorRef.current.currentTime = 0;
 
       }
 
 
-      return next;
+      return;
+
+    }
 
 
-    });
+
+    // 🔊 unlock browser audio
+    if (aviatorRef.current) {
+
+      aviatorRef.current.volume = 1;
+
+    }
+
+
+    if (crashRef.current) {
+
+      crashRef.current.volume = 1;
+
+    }
 
 
   };
@@ -72,7 +79,6 @@ export function SoundProvider({ children }) {
     if (!soundState.current) return;
 
 
-
     const audio = aviatorRef.current;
 
 
@@ -81,8 +87,7 @@ export function SoundProvider({ children }) {
 
 
     audio.loop = true;
-
-    audio.volume = 0.5;
+    audio.volume = 1;
 
 
 
@@ -93,7 +98,7 @@ export function SoundProvider({ children }) {
       .catch(err => {
 
         console.log(
-          "Engine error:",
+          "Engine blocked:",
           err
         );
 
@@ -122,10 +127,6 @@ export function SoundProvider({ children }) {
     audio.pause();
 
 
-    // DON'T reset currentTime
-    // resetting was causing the dead audio issue
-
-
   };
 
 
@@ -147,6 +148,8 @@ export function SoundProvider({ children }) {
 
 
 
+    audio.pause();
+
     audio.currentTime = 0;
 
     audio.volume = 1;
@@ -157,7 +160,7 @@ export function SoundProvider({ children }) {
     .catch(err => {
 
       console.log(
-        "Crash error:",
+        "Crash blocked:",
         err
       );
 
@@ -165,6 +168,7 @@ export function SoundProvider({ children }) {
 
 
   };
+
 
 
 
@@ -208,6 +212,7 @@ export function SoundProvider({ children }) {
 
 
 }
+
 
 
 export const useSound = () => useContext(SoundContext);
