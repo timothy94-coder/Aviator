@@ -273,29 +273,69 @@ function DepositModal({ onClose, onDepositSuccess }) {
     // =========================
     // STK PAYMENT
     // =========================
-
-    async function payNow() {
-
-
-        if (lockRef.current) return;
+async function payNow() {
 
 
-        lockRef.current = true;
+    if (lockRef.current) return;
 
 
-
-        const normalized = normalizePhone(phone);
+    lockRef.current = true;
 
 
 
-        if (!normalized) {
+    const normalized = normalizePhone(phone);
 
 
-            alert("Invalid phone number");
 
-            lockRef.current = false;
+    if (!normalized) {
 
-            return;
+
+        alert("Invalid phone number");
+
+        lockRef.current = false;
+
+        return;
+
+    }
+
+
+
+
+
+
+    if (Number(amount) < MIN) {
+
+
+        alert("Minimum deposit is 500 KES");
+
+
+        lockRef.current = false;
+
+
+        return;
+
+    }
+
+
+
+    try {
+
+
+        setLoading(true);
+
+
+        setStatus("Sending STK push...");
+
+
+
+
+
+        if (!localIdRef.current) {
+
+
+            localIdRef.current =
+                `DEP-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+
 
         }
 
@@ -303,216 +343,270 @@ function DepositModal({ onClose, onDepositSuccess }) {
 
 
 
-        if (Number(amount) < MIN) {
 
 
-            alert("Minimum deposit is 500 KES");
+        const res = await fetch(
+            `${MPESA_BASE}/api/runPrompt`,
+            {
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
 
 
-            lockRef.current = false;
+                body:JSON.stringify({
 
+                    phone:normalized,
 
-            return;
+                    amount:Number(amount),
 
-        }
+                    local_id:localIdRef.current,
 
+                    transaction_desc:"Aviator Deposit",
 
+                    till_id:"1"
 
-        try {
-
-
-            setLoading(true);
-
-
-            setStatus("Sending STK push...");
-
-
-
-
-
-            if (!localIdRef.current) {
-
-
-                localIdRef.current =
-                    `DEP-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
-
+                })
 
             }
+        );
 
 
 
 
 
 
-            const res = await fetch(
-                `${MPESA_BASE}/api/runPrompt`,
-                {
-
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":"application/json"
-                    },
+        const data = await res.json();
 
 
-                    body:JSON.stringify({
 
-                        phone:normalized,
+        console.log(
+            "STK RESPONSE:",
+            data
+        );
 
-                        amount:Number(amount),
 
-                        local_id:localIdRef.current,
 
-                        transaction_desc:"Aviator Deposit",
 
-                        till_id:"1"
 
-                    })
+
+        if(!res.ok || data.status === false){
+
+
+            setStatus("STK failed ❌");
+
+
+            setLoading(false);
+
+            lockRef.current=false;
+
+            return;
+
+
+        }
+
+
+
+
+
+
+        setStatus(
+            "STK sent 📲 check your phone"
+        );
+
+
+
+
+
+        const checkoutId =
+            data.checkout_request_id ||
+            data.checkoutRequestId ||
+            data.id ||
+            null;
+
+
+
+
+        // =========================
+        // POLLING PAYMENT STATUS
+        // =========================
+
+        if (checkoutId) {
+
+
+            let attempts = 0;
+
+
+
+            pollRef.current = setInterval(async () => {
+
+
+                attempts++;
+
+
+
+                // stop after about 72 seconds
+
+                if(attempts >= 18){
+
+
+                    clearInterval(
+                        pollRef.current
+                    );
+
+
+                    setStatus(
+                        "Payment timeout. Please try again."
+                    );
+
+
+                    setLoading(false);
+
+                    lockRef.current=false;
+
+
+                    return;
 
                 }
-            );
 
 
 
 
 
-            const data = await res.json();
+                try {
+
+
+                    const r = await fetch(
+                        `${MPESA_BASE}/api/status/${checkoutId}`
+                    );
+
+
+                    const d = await r.json();
 
 
 
-            console.log(
-                "STK RESPONSE:",
-                data
-            );
-
-
-
-
-
-            if(!res.ok || data.status === false){
-
-
-                setStatus("STK failed ❌");
-
-
-                
-                return;
-
-
-            }
+                    console.log(
+                        "PAYMENT STATUS:",
+                        d
+                    );
 
 
 
 
 
-            setStatus(
-                "STK sent 📲 check your phone"
-            );
+
+                    if (
+                        d?.status === "completed" ||
+                        d?.status === "success" ||
+                        d?.payment_status === "completed" ||
+                        d?.payment_status === "SUCCESS" ||
+                        d?.transaction_status === "completed" ||
+                        d?.ResultCode === 0
+                    ){
 
 
-
-
-            const checkoutId =
-                data.checkout_request_id ||
-                data.checkoutRequestId ||
-                data.id ||
-                null;
-
-                
-            // =========================
-            // POLLING PAYMENT STATUS
-            // =========================
-
-            if (checkoutId) {
-
-
-                pollRef.current = setInterval(async () => {
-
-
-                    try {
-
-
-                        const r = await fetch(
-                            `${MPESA_BASE}/api/status/${checkoutId}`
+                        clearInterval(
+                            pollRef.current
                         );
 
 
-                        const d = await r.json();
 
-
-
-                       if (
-    d?.success === true &&
-    (
-        d?.status === "completed" ||
-        d?.payment_status === "SUCCESS" ||
-        d?.ResultCode === 0
-    )
-){
-
-
-                            clearInterval(
-                                pollRef.current
-                            );
-
-
-                            setStatus(
-                                "Payment successful ✅"
-                            );
-
-
-                            setLoading(false);
-
-
-                            lockRef.current = false;
-
-
-
-                            onDepositSuccess(amount);
-
-alert(
-    "DEPOSIT SUCCESSFUL 🎉"
-);
-
-
-                        }
-
-
-
-                    } catch(err) {
-
-
-                        console.log(
-                            "poll error",
-                            err
+                        setStatus(
+                            "Payment successful ✅"
                         );
+
+
+
+                        setLoading(false);
+
+
+
+                        lockRef.current = false;
+
+
+
+
+                        onDepositSuccess(amount);
+
+
+
+                        alert(
+                            "DEPOSIT SUCCESSFUL 🎉"
+                        );
+
 
 
                     }
 
 
 
-                },4000);
 
 
-            }
+                    else if(
+                        d?.status === "failed" ||
+                        d?.status === "cancelled" ||
+                        (
+                            d?.ResultCode !== undefined &&
+                            d?.ResultCode !== 0
+                        )
+                    ){
+
+
+                        clearInterval(
+                            pollRef.current
+                        );
+
+
+
+                        setStatus(
+                            "Payment failed ❌"
+                        );
+
+
+
+                        setLoading(false);
+
+
+                        lockRef.current=false;
+
+
+                    }
 
 
 
 
-        } catch(err){
+
+                } catch(err) {
 
 
-            console.log(err);
+                    console.log(
+                        "poll error",
+                        err
+                    );
 
 
-            setStatus(
-                "Network error ❌"
-            );
+                }
+
+
+
+            },4000);
 
 
         }
 
+
+
+    } catch(err){
+
+
+        console.log(err);
+
+
+        setStatus(
+            "Network error ❌"
+        );
 
 
         setLoading(false);
@@ -522,6 +616,8 @@ alert(
 
     }
 
+
+}
 
 
 
