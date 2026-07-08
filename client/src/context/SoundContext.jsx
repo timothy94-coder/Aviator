@@ -1,240 +1,73 @@
-import React, {
-  createContext,
-  useContext,
-  useRef,
-  useState
-} from "react";
-
+import React, { createContext, useContext, useRef, useState } from "react";
 
 const SoundContext = createContext(null);
 
-
 export function SoundProvider({ children }) {
-
 
   const [soundOn, setSoundOn] = useState(true);
 
-  const soundState = useRef(true);
+  const aviatorRef = useRef(null);
+  const crashRef = useRef(null);
 
-
-  const engineAudio = useRef(null);
-  const crashAudio = useRef(null);
-
-
-
-  // create engine sound when needed
-  const createEngine = () => {
-
-    if (!engineAudio.current) {
-
-      engineAudio.current = new Audio(
-        "/sounds/aviator.mp3"
-      );
-
-      engineAudio.current.loop = true;
-      engineAudio.current.volume = 1;
-
-    }
-
-    return engineAudio.current;
-
-  };
-
-
-
-  const createCrash = () => {
-
-    if (!crashAudio.current) {
-
-      crashAudio.current = new Audio(
-        "/sounds/crash.mp3"
-      );
-
-      crashAudio.current.volume = 1;
-
-    }
-
-    return crashAudio.current;
-
-  };
-
-
-
-
+  // toggle sound
   const toggleSound = () => {
+    setSoundOn(prev => {
+      const next = !prev;
 
-
-    const next = !soundState.current;
-
-    soundState.current = next;
-
-    setSoundOn(next);
-
-
-
-    if (!next) {
-
-
-      if (engineAudio.current) {
-
-        engineAudio.current.pause();
-
-        engineAudio.current.currentTime = 0;
-
+      if (!next && aviatorRef.current) {
+        aviatorRef.current.pause();
+        aviatorRef.current.currentTime = 0;
       }
 
-
-      if (crashAudio.current) {
-
-        crashAudio.current.pause();
-
-        crashAudio.current.currentTime = 0;
-
-      }
-
-
-    }
-
-
+      return next;
+    });
   };
 
+  // 🎵 THIS MATCHES YOUR CODE: playEngine()
+  const playEngine = () => {
+    if (!soundOn) return;
 
-
-
-
-  const playEngine = async () => {
-
-
-    if (!soundState.current) return;
-
-
-
-    const audio = createEngine();
-
-
-
-    try {
-
-
-      if (audio.paused) {
-
-
-        audio.currentTime = 0;
-
-
-        await audio.play();
-
-
-      }
-
-
-    } catch(err) {
-
-
-      console.log(
-        "Engine sound error:",
-        err
-      );
-
-
+    if (aviatorRef.current) {
+      aviatorRef.current.loop = true;
+      aviatorRef.current.volume = 0.5;
+      aviatorRef.current.play().catch(() => {});
     }
-
-
   };
 
-
-
-
-
-
+  // 🛑 THIS MATCHES YOUR CODE: stopEngine()
   const stopEngine = () => {
-
-
-    if (engineAudio.current) {
-
-
-      engineAudio.current.pause();
-
-
-      // don't reset here
-      // keeps browser audio pipeline alive
-
-
+    if (aviatorRef.current) {
+      aviatorRef.current.pause();
+      aviatorRef.current.currentTime = 0;
     }
-
-
   };
 
+  // 💥 CRASH SOUND
+  const playCrash = () => {
+    if (!soundOn) return;
 
-
-
-
-
-
-  const playCrash = async () => {
-
-
-    if (!soundState.current) return;
-
-
-
-    const audio = createCrash();
-
-
-
-    try {
-
-
-      audio.pause();
-
-      audio.currentTime = 0;
-
-
-      await audio.play();
-
-
-
-    } catch(err) {
-
-
-      console.log(
-        "Crash sound error:",
-        err
-      );
-
-
+    if (crashRef.current) {
+      crashRef.current.currentTime = 0;
+      crashRef.current.play().catch(() => {});
     }
-
-
   };
-
-
-
-
-
 
   return (
+    <SoundContext.Provider value={{
+      soundOn,
+      toggleSound,
+      playEngine,
+      stopEngine,
+      playCrash
+    }}>
 
-    <SoundContext.Provider
-
-      value={{
-        soundOn,
-        toggleSound,
-        playEngine,
-        stopEngine,
-        playCrash
-      }}
-
-    >
+      {/* ONLY TWO SOUNDS */}
+      <audio ref={aviatorRef} src="/sounds/aviator.mp3" preload="auto" />
+      <audio ref={crashRef} src="/sounds/crash.mp3" preload="auto" />
 
       {children}
-
     </SoundContext.Provider>
-
   );
-
 }
-
-
 
 export const useSound = () => useContext(SoundContext);
