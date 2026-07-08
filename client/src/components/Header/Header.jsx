@@ -318,13 +318,16 @@ function openDeposit(){
 
 
 
-            {open && (
+          {open && (
 
-                <DepositModal 
-                    onClose={() => setOpen(false)}
-                />
+    <DepositModal 
+        onClose={() => setOpen(false)}
+        onDepositSuccess={(amount)=>{
+            setBalance(prev => prev + Number(amount));
+        }}
+    />
 
-            )}
+)}
 
 
 
