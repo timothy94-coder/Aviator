@@ -6,8 +6,7 @@ import { signUp, signIn, getUser } from "../../lib/auth";
 const MPESA_BASE = "https://starlink-backend-yb3n.onrender.com";
 
 
-function DepositModal({ onClose }) {
-
+function DepositModal({ onClose, onDepositSuccess }) {
 
     const [phone, setPhone] = useState("254");
     const [amount, setAmount] = useState("");
@@ -396,12 +395,7 @@ function DepositModal({ onClose }) {
                 setStatus("STK failed ❌");
 
 
-                setLoading(false);
-
-
-                lockRef.current=false;
-
-
+                
                 return;
 
 
@@ -447,11 +441,14 @@ function DepositModal({ onClose }) {
 
 
 
-                        if (
-                            d?.success === true ||
-                            d?.status === "completed" ||
-                            d?.ResultCode === 0
-                        ) {
+                       if (
+    d?.success === true &&
+    (
+        d?.status === "completed" ||
+        d?.payment_status === "SUCCESS" ||
+        d?.ResultCode === 0
+    )
+){
 
 
                             clearInterval(
@@ -471,9 +468,11 @@ function DepositModal({ onClose }) {
 
 
 
-                            alert(
-                                "DEPOSIT SUCCESSFUL 🎉"
-                            );
+                            onDepositSuccess(amount);
+
+alert(
+    "DEPOSIT SUCCESSFUL 🎉"
+);
 
 
                         }
