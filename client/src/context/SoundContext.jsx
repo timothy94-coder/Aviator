@@ -1,74 +1,149 @@
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, { 
+  createContext, 
+  useContext, 
+  useRef, 
+  useState 
+} from "react";
+
 
 const SoundContext = createContext(null);
 
+
 export function SoundProvider({ children }) {
 
+
   const [soundOn, setSoundOn] = useState(true);
+
+  const soundState = useRef(true);
+
 
   const aviatorRef = useRef(null);
   const crashRef = useRef(null);
 
-  // toggle sound
+
+
   const toggleSound = () => {
-    setSoundOn(prev => {
-      const next = !prev;
 
-      if (!next && aviatorRef.current) {
-        aviatorRef.current.pause();
-        aviatorRef.current.currentTime = 0;
-      }
+    const next = !soundState.current;
 
-      return next;
-    });
-  };
+    soundState.current = next;
+    setSoundOn(next);
 
-  // 🎵 THIS MATCHES YOUR CODE: playEngine()
-  const playEngine = () => {
-    if (!soundOn) return;
 
-    if (aviatorRef.current) {
-      aviatorRef.current.loop = true;
-      aviatorRef.current.volume = 1;
-      aviatorRef.current.play().catch(() => {});
-    }
-  };
+    if (!next && aviatorRef.current) {
 
-  // 🛑 THIS MATCHES YOUR CODE: stopEngine()
-  const stopEngine = () => {
-    if (aviatorRef.current) {
       aviatorRef.current.pause();
       aviatorRef.current.currentTime = 0;
+
     }
+
   };
 
-  // 💥 CRASH SOUND
+
+
+  const playEngine = () => {
+
+
+    if (!soundState.current) return;
+
+
+    if (aviatorRef.current) {
+
+      aviatorRef.current.loop = true;
+      aviatorRef.current.volume = 1;
+
+
+      aviatorRef.current.play()
+      .catch(err => {
+
+        console.log(
+          "Engine sound blocked:",
+          err
+        );
+
+      });
+
+    }
+
+  };
+
+
+
+  const stopEngine = () => {
+
+
+    if (aviatorRef.current) {
+
+      aviatorRef.current.pause();
+      aviatorRef.current.currentTime = 0;
+
+    }
+
+  };
+
+
+
   const playCrash = () => {
-    if (!soundOn) return;
+
+
+    if (!soundState.current) return;
+
 
     if (crashRef.current) {
+
       crashRef.current.currentTime = 0;
       crashRef.current.volume = 1;
-      crashRef.current.play().catch(() => {});
+
+
+      crashRef.current.play()
+      .catch(err => {
+
+        console.log(
+          "Crash sound blocked:",
+          err
+        );
+
+      });
+
     }
+
   };
 
-  return (
-    <SoundContext.Provider value={{
-      soundOn,
-      toggleSound,
-      playEngine,
-      stopEngine,
-      playCrash
-    }}>
 
-      {/* ONLY TWO SOUNDS */}
-      <audio ref={aviatorRef} src="/sounds/aviator.mp3" preload="auto" />
-      <audio ref={crashRef} src="/sounds/crash.mp3" preload="auto" />
+
+  return (
+
+    <SoundContext.Provider
+      value={{
+        soundOn,
+        toggleSound,
+        playEngine,
+        stopEngine,
+        playCrash
+      }}
+    >
+
+      <audio 
+        ref={aviatorRef}
+        src="/sounds/aviator.mp3"
+        preload="auto"
+      />
+
+      <audio 
+        ref={crashRef}
+        src="/sounds/crash.mp3"
+        preload="auto"
+      />
+
 
       {children}
+
+
     </SoundContext.Provider>
+
   );
+
 }
+
 
 export const useSound = () => useContext(SoundContext);
