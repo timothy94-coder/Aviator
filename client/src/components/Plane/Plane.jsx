@@ -16,8 +16,9 @@ function Plane() {
                 left: `${(x / 900) * 100}%`,
                 top: `${(y / 400) * 100}%`,
                 transform: `
-                    translate(-15%, -50%)
-                    rotate(${-progress * 28}deg)
+               translate(-35%, -35%)
+               rotate(${-progress * 28}deg)
+
                 `
             }}
         />
