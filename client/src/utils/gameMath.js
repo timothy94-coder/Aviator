@@ -2,27 +2,19 @@ export function getFlightData(multiplier) {
 
     const safeMultiplier = Math.max(1, multiplier);
 
-    /*
-    🔥 NEW PROGRESS (LOG BASED)
-    Slower start, smoother growth
-    */
     const progress = Math.min(
-        Math.log(safeMultiplier) / Math.log(100), // up to ~100x
+        Math.log(safeMultiplier) / Math.log(100),
         1
     );
 
 
-    /*
-    Horizontal movement
-    */
-    const x = 60 + progress * 720;
+    const x = 45 + progress * 775;
 
 
-    /*
-    Vertical movement
-    smoother takeoff (no jumping)
-    */
-    const y = 360 - Math.pow(progress, 2.2) * 280;
+    // smoother takeoff
+    const climb = Math.pow(progress, 1.7);
+
+    const y = 350 - climb * 300;
 
 
     return {
