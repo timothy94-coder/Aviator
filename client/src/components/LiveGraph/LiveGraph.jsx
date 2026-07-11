@@ -9,20 +9,18 @@ function LiveGraph() {
     const { x, y } = getFlightData(game.multiplier || 1);
 
 
-    // Plane tail anchor adjustment
-    const tailX = x - 35;
-    const tailY = y + 54;
+    const tailX = x - 20;
+    const tailY = y + 55;
 
 
     const path = `
-        M 40 380
-        Q ${tailX * 0.55} 380,
+        M 0 395
+        Q ${tailX * 0.5} 395,
           ${tailX} ${tailY}
     `;
 
 
     return (
-
         <svg
             className="live-graph"
             viewBox="0 0 900 400"
@@ -30,7 +28,7 @@ function LiveGraph() {
         >
 
             <path
-                d={`${path} L ${tailX} 400 L 40 400 Z`}
+                d={`${path} L ${tailX} 400 L 0 400 Z`}
                 className="graph-fill"
             />
 
@@ -40,9 +38,7 @@ function LiveGraph() {
             />
 
         </svg>
-
     );
-
 }
 
 export default LiveGraph;
