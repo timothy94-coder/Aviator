@@ -2,21 +2,28 @@ export function getFlightData(multiplier) {
 
     const safeMultiplier = Math.max(1, multiplier);
 
-    // Flight progress (0 -> 1)
-    const progress = Math.min((safeMultiplier - 1) / 9, 1);
+    /*
+    🔥 NEW PROGRESS (LOG BASED)
+    Slower start, smoother growth
+    */
+    const progress = Math.min(
+        Math.log(safeMultiplier) / Math.log(100), // up to ~100x
+        1
+    );
+
 
     /*
-      Horizontal movement:
-      Plane reaches only about 78% of the board.
-      It never flies outside.
+    Horizontal movement
     */
-    const x = 70 + progress * 700;
+    const x = 60 + progress * 720;
+
 
     /*
-      Smooth climb.
-      Starts low then rises faster.
+    Vertical movement
+    smoother takeoff (no jumping)
     */
-    const y = 340 - Math.pow(progress, 1.8) * 250;
+    const y = 360 - Math.pow(progress, 2.2) * 280;
+
 
     return {
         progress,
