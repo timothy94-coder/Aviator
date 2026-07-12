@@ -32,7 +32,10 @@ export default function socketHandler(io) {
 
             socket.emit("gameState", getGameState());
             socket.emit("betsUpdate", getBets());
-            socket.emit("historyUpdate", history);
+            socket.emit(
+    "historyUpdate",
+    [...history]
+);
             socket.emit("winnersUpdate", winners);
 
         });
@@ -41,7 +44,10 @@ export default function socketHandler(io) {
         // ✅ ALSO SEND IMMEDIATELY (backup, works even without request)
         socket.emit("gameState", getGameState());
         socket.emit("betsUpdate", getBets());
-        socket.emit("historyUpdate", history);
+        socket.emit(
+    "historyUpdate",
+    [...history]
+);
         socket.emit("winnersUpdate", winners);
 
 
