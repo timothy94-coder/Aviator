@@ -1,5 +1,6 @@
 import "./HistoryBar.css";
 import { useGame } from "../../context/GameContext";
+import { useEffect, useRef } from "react";
 
 function getColor(value) {
     if (value < 2) return "red";
@@ -10,28 +11,28 @@ function getColor(value) {
 function HistoryBar() {
 
     const { history } = useGame();
+    const barRef = useRef(null);
 
-    // ✅ LIMIT VISIBLE ITEMS (LIKE AVIATOR)
-    const visibleHistory = history.slice(0, 12);
+    // ✅ ALWAYS SHOW LATEST (LEFT SIDE)
+    useEffect(() => {
+        if (barRef.current) {
+            barRef.current.scrollTo({
+                left: 0,
+                behavior: "instant" // no animation = no lag
+            });
+        }
+    }, [history]);
 
     return (
-        <div className="history-wrapper">
-
-            <div className="history-bar">
-
-                {visibleHistory.map((item, index) => (
-
-                    <div
-                        key={`${item}-${index}`}
-                        className={`history-chip ${getColor(item)}`}
-                    >
-                        {Number(item).toFixed(2)}x
-                    </div>
-
-                ))}
-
-            </div>
-
+        <div className="history-bar" ref={barRef}>
+            {history?.map((item, index) => (
+                <div
+                    key={`${item}-${index}`}
+                    className={`history-chip ${getColor(item)}`}
+                >
+                    {Number(item).toFixed(2)}x
+                </div>
+            ))}
         </div>
     );
 }
