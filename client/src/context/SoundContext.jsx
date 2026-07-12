@@ -2,7 +2,8 @@ import React, {
   createContext,
   useContext,
   useRef,
-  useState
+  useState,
+  useEffect
 } from "react";
 
 
@@ -13,9 +14,10 @@ const SoundContext = createContext(null);
 export function SoundProvider({ children }) {
 
 
-const [soundOn, setSoundOn] = useState(true);
+  const [soundOn, setSoundOn] = useState(true);
 
-const soundState = useRef(true);
+
+  const soundState = useRef(true);
 
 
   const aviatorRef = useRef(null);
@@ -23,32 +25,141 @@ const soundState = useRef(true);
 
 
 
-  const unlockAudio = async () => {
+  // AUTO UNLOCK AUDIO AFTER FIRST USER ACTION
+  useEffect(() => {
 
-    try {
 
-      if (aviatorRef.current) {
+    const unlock = async () => {
 
-        aviatorRef.current.volume = 0;
+      try {
 
-        await aviatorRef.current.play();
 
-        aviatorRef.current.pause();
+        const audio = aviatorRef.current;
 
-        aviatorRef.current.currentTime = 0;
 
-        aviatorRef.current.volume = 1;
+        if(audio){
+
+
+          audio.volume = 0;
+
+
+          await audio.play();
+
+
+          audio.pause();
+
+
+          audio.currentTime = 0;
+
+
+          audio.volume = 1;
+
+
+          console.log("Audio unlocked");
+
+
+        }
+
+
+      } catch(err){
+
+
+        console.log(
+          "Audio waiting for interaction"
+        );
+
 
       }
 
 
-    } catch(err){
+    };
 
-      console.log("Audio unlock failed", err);
+
+
+    window.addEventListener(
+      "click",
+      unlock,
+      { once:true }
+    );
+
+
+    window.addEventListener(
+      "touchstart",
+      unlock,
+      { once:true }
+    );
+
+
+
+    return ()=>{
+
+
+      window.removeEventListener(
+        "click",
+        unlock
+      );
+
+
+      window.removeEventListener(
+        "touchstart",
+        unlock
+      );
+
+
+    };
+
+
+  },[]);
+
+
+
+
+
+
+  const unlockAudio = async () => {
+
+
+    try {
+
+
+      if(aviatorRef.current){
+
+
+        aviatorRef.current.volume = 0;
+
+
+        await aviatorRef.current.play();
+
+
+        aviatorRef.current.pause();
+
+
+        aviatorRef.current.currentTime = 0;
+
+
+        aviatorRef.current.volume = 1;
+
+
+      }
+
+
+
+    }catch(err){
+
+
+      console.log(
+        "Unlock failed:",
+        err
+      );
+
 
     }
 
+
   };
+
+
+
 
 
 
@@ -64,7 +175,6 @@ const soundState = useRef(true);
 
 
     setSoundOn(next);
-
 
 
 
@@ -90,7 +200,9 @@ const soundState = useRef(true);
 
       return;
 
+
     }
+
 
 
 
@@ -98,18 +210,25 @@ const soundState = useRef(true);
 
     if(aviatorRef.current){
 
+
       aviatorRef.current.pause();
 
+
       aviatorRef.current.currentTime = 0;
+
 
     }
 
 
+
     if(crashRef.current){
+
 
       crashRef.current.pause();
 
+
       crashRef.current.currentTime = 0;
+
 
     }
 
@@ -121,46 +240,70 @@ const soundState = useRef(true);
 
 
 
+
+
   const playEngine = async () => {
 
-    console.log("playEngine called:", soundState.current);
+
+    console.log(
+      "Engine:",
+      soundState.current
+    );
 
 
     if(!soundState.current) return;
 
 
+
     const audio = aviatorRef.current;
+
 
 
     if(!audio) return;
 
 
 
+
     audio.loop = true;
+
+
     audio.volume = 1;
 
 
 
-    try {
+    try{
 
-        if(audio.paused){
 
-            await audio.play();
+      if(audio.paused){
 
-            console.log("Engine playing");
 
-        }
+        await audio.play();
 
-    } catch(err){
 
         console.log(
-            "Engine blocked:",
-            err
+          "Engine started"
         );
+
+
+      }
+
+
+    }catch(err){
+
+
+      console.log(
+        "Engine error:",
+        err
+      );
+
 
     }
 
-};
+
+  };
+
+
+
 
 
 
@@ -172,7 +315,9 @@ const soundState = useRef(true);
     const audio = aviatorRef.current;
 
 
+
     if(!audio) return;
+
 
 
     audio.pause();
@@ -185,13 +330,17 @@ const soundState = useRef(true);
 
 
 
+
+
   const playCrash = () => {
 
 
     if(!soundState.current) return;
 
 
+
     const audio = crashRef.current;
+
 
 
     if(!audio) return;
@@ -209,19 +358,24 @@ const soundState = useRef(true);
 
 
 
+
     audio.play()
 
     .catch(err=>{
 
+
       console.log(
-        "Crash blocked:",
+        "Crash error:",
         err
       );
+
 
     });
 
 
   };
+
+
 
 
 
@@ -267,6 +421,7 @@ const soundState = useRef(true);
 
 
 }
+
 
 
 
