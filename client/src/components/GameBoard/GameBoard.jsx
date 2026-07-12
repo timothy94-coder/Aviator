@@ -9,7 +9,7 @@ import { useSound } from "../../context/SoundContext";
 import bg from "../../assets/images/imagebg.svg";
 
 function GameBoard() {
-    const { game } = useGame();
+    const { game, gameReady } = useGame();
     const { playEngine, stopEngine, playCrash } = useSound();
 
      useEffect(() => {
@@ -37,8 +37,12 @@ function GameBoard() {
         {/* 🌪️ SPIRAL ONLY INSIDE CANVAS */}
         <img src={bg} className="sky-bg" alt="bg" />
     <div className={`flight-zone ${game.status}`}>
+       {gameReady && (
+    <>
         <LiveGraph />
         <Plane />
+    </>
+)}
 
         <div className="multiplier">
 
