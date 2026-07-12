@@ -2,8 +2,7 @@ import React, {
   createContext,
   useContext,
   useRef,
-  useState,
-  useEffect
+  useState
 } from "react";
 
 
@@ -14,7 +13,6 @@ const SoundContext = createContext(null);
 export function SoundProvider({ children }) {
 
 
-  // 🔇 OFF BY DEFAULT
   const [soundOn, setSoundOn] = useState(false);
 
 
@@ -26,14 +24,13 @@ export function SoundProvider({ children }) {
 
 
 
-
   const unlockAudio = async () => {
 
     try {
 
       if (aviatorRef.current) {
 
-        aviatorRef.current.volume = 1;
+        aviatorRef.current.volume = 0;
 
         await aviatorRef.current.play();
 
@@ -41,28 +38,14 @@ export function SoundProvider({ children }) {
 
         aviatorRef.current.currentTime = 0;
 
-      }
-
-
-      if (crashRef.current) {
-
-        crashRef.current.volume = 1;
-
-        await crashRef.current.play();
-
-        crashRef.current.pause();
-
-        crashRef.current.currentTime = 0;
+        aviatorRef.current.volume = 1;
 
       }
 
 
-    } catch(err) {
+    } catch(err){
 
-      console.log(
-        "Audio unlock failed:",
-        err
-      );
+      console.log("Audio unlock failed", err);
 
     }
 
@@ -72,8 +55,7 @@ export function SoundProvider({ children }) {
 
 
 
-
-  const toggleSound = () => {
+  const toggleSound = async () => {
 
 
     const next = !soundState.current;
@@ -81,24 +63,28 @@ export function SoundProvider({ children }) {
 
     soundState.current = next;
 
+
     setSoundOn(next);
 
 
 
 
-    if (!next) {
+    if(next){
 
 
-      if (aviatorRef.current) {
+      await unlockAudio();
 
-        aviatorRef.current.pause();
+
+      if(aviatorRef.current){
+
+        aviatorRef.current.volume = 1;
 
       }
 
 
-      if (crashRef.current) {
+      if(crashRef.current){
 
-        crashRef.current.pause();
+        crashRef.current.volume = 1;
 
       }
 
@@ -109,8 +95,24 @@ export function SoundProvider({ children }) {
 
 
 
-    // 🔊 unlock browser audio after user gesture
-    unlockAudio();
+
+
+    if(aviatorRef.current){
+
+      aviatorRef.current.pause();
+
+      aviatorRef.current.currentTime = 0;
+
+    }
+
+
+    if(crashRef.current){
+
+      crashRef.current.pause();
+
+      crashRef.current.currentTime = 0;
+
+    }
 
 
   };
@@ -120,20 +122,16 @@ export function SoundProvider({ children }) {
 
 
 
-
-
-
   const playEngine = () => {
 
 
-    if (!soundState.current) return;
-
+    if(!soundState.current) return;
 
 
     const audio = aviatorRef.current;
 
 
-    if (!audio) return;
+    if(!audio) return;
 
 
 
@@ -143,13 +141,12 @@ export function SoundProvider({ children }) {
 
 
 
-
-    if (audio.paused) {
+    if(audio.paused){
 
 
       audio.play()
 
-      .catch(err => {
+      .catch(err=>{
 
         console.log(
           "Engine blocked:",
@@ -169,17 +166,13 @@ export function SoundProvider({ children }) {
 
 
 
-
-
-
   const stopEngine = () => {
 
 
     const audio = aviatorRef.current;
 
 
-    if (!audio) return;
-
+    if(!audio) return;
 
 
     audio.pause();
@@ -192,20 +185,17 @@ export function SoundProvider({ children }) {
 
 
 
-
-
-
   const playCrash = () => {
 
 
-    if (!soundState.current) return;
-
+    if(!soundState.current) return;
 
 
     const audio = crashRef.current;
 
 
-    if (!audio) return;
+    if(!audio) return;
+
 
 
 
@@ -219,10 +209,9 @@ export function SoundProvider({ children }) {
 
 
 
-
     audio.play()
 
-    .catch(err => {
+    .catch(err=>{
 
       console.log(
         "Crash blocked:",
@@ -233,41 +222,6 @@ export function SoundProvider({ children }) {
 
 
   };
-
-
-
-
-
-
-
-
-
-  useEffect(() => {
-
-
-    return () => {
-
-
-      if (aviatorRef.current) {
-
-        aviatorRef.current.pause();
-
-      }
-
-
-      if (crashRef.current) {
-
-        crashRef.current.pause();
-
-      }
-
-
-    };
-
-
-  }, []);
-
-
 
 
 
@@ -291,31 +245,17 @@ export function SoundProvider({ children }) {
 
 
       <audio
-
         ref={aviatorRef}
-
         src="/sounds/aviator.mp3"
-
         preload="auto"
-
-        playsInline
-
       />
-
 
 
       <audio
-
         ref={crashRef}
-
         src="/sounds/crash.mp3"
-
         preload="auto"
-
-        playsInline
-
       />
-
 
 
       {children}
@@ -327,7 +267,6 @@ export function SoundProvider({ children }) {
 
 
 }
-
 
 
 
