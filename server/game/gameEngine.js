@@ -435,17 +435,12 @@ function runFlyingPhase(){
 
 
 
-                history.unshift(
-                    finalCrash
-                );
+               history.push(finalCrash);
 
-
-
-                if(history.length > 20){
-
-                    history.length = 20;
-
-                }
+// keep only last 20
+if (history.length > 20) {
+    history.shift();
+}
 
 
 
