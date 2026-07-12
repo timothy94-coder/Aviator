@@ -6,7 +6,6 @@ let gameState = {
     roundId: 1,
 };
 
-
 let io = null;
 
 let winners = [];
@@ -18,69 +17,36 @@ let bets = {};
 function generateFakeWinners() {
 
     const fakeUsers = [
-        "Alex",
-        "Brian",
-        "Kevin",
-        "John",
-        "Sarah",
-        "Wambui",
-        "Mutua",
-        "Ali",
-        "Grace",
-        "Tony"
+        "Alex","Brian","Kevin","John","Sarah",
+        "Wambui","Mutua","Ali","Grace","Tony"
     ];
-
 
     const count = Math.floor(Math.random() * 5) + 3;
 
-
     const roundWinners = [];
 
-
-    for(let i = 0; i < count; i++) {
-
+    for (let i = 0; i < count; i++) {
 
         const multiplier = Number(
             (Math.random() * 5 + 1.2).toFixed(2)
         );
 
-
         const amount =
             Math.floor(Math.random() * 500) + 50;
 
-
         roundWinners.push({
-
-            userId:
-                fakeUsers[
-                    Math.floor(
-                        Math.random() * fakeUsers.length
-                    )
-                ],
-
+            userId: fakeUsers[
+                Math.floor(Math.random() * fakeUsers.length)
+            ],
             multiplier,
-
-            winnings:
-                Math.floor(
-                    amount * multiplier
-                ),
-
-            roundId:
-                gameState.roundId
-
+            winnings: Math.floor(amount * multiplier),
+            roundId: gameState.roundId
         });
-
     }
-
 
     winners = roundWinners;
 
-
-    io.emit(
-        "winnersUpdate",
-        winners
-    );
-
+    io.emit("winnersUpdate", [...winners]);
 }
 
 
@@ -88,343 +54,201 @@ function generateFakeWinners() {
 
 
 let scheduledEvents = [
-
     {
-        time:
-        new Date(
-            "2026-07-12T19:55:00+03:00"
-        ),
-
-        rounds:[
-            64,
-            62,
-            72,
-            35
-        ],
-
-        used:false
+        time: new Date("2026-07-12T19:55:00+03:00"),
+        rounds: [64, 62, 72, 35],
+        used: false
     }
-
 ];
-
-
 
 let forcedCrashPoints = [];
 
 
 
-
-function checkScheduledRounds(){
+function checkScheduledRounds() {
 
     const now = new Date();
 
+    for (const event of scheduledEvents) {
 
-    for(const event of scheduledEvents){
-
-
-        if(
-            now >= event.time &&
-            !event.used
-        ){
+        if (now >= event.time && !event.used) {
 
             event.used = true;
 
+            forcedCrashPoints = [...event.rounds];
 
-            forcedCrashPoints = [
-                ...event.rounds
-            ];
-
-
-            console.log(
-                "Scheduled rounds:",
-                forcedCrashPoints
-            );
-
+            console.log("Scheduled rounds:", forcedCrashPoints);
         }
-
     }
-
 }
 
 
 
 
 
-function randomCrashPoint(){
-
+function randomCrashPoint() {
 
     checkScheduledRounds();
 
+    // 🔥 USE FORCED ROUNDS FIRST
+    if (forcedCrashPoints.length > 0) {
 
-    if(forcedCrashPoints.length > 0){
+        const forced = forcedCrashPoints.shift();
 
-
-        const forced =
-            forcedCrashPoints.shift();
-
-
-        console.log(
-            "Special crash:",
-            forced
-        );
-
+        console.log("Special crash:", forced);
 
         return forced;
-
     }
 
-
-
+    // NORMAL DISTRIBUTION
     const r = Math.random();
-
     let crash;
 
-
-    if(r < 0.90){
-
+    if (r < 0.90) {
         crash = Math.random() * 4 + 1;
-
     }
-
-    else if(r < 0.98){
-
+    else if (r < 0.98) {
         crash = Math.random() * 15 + 5;
-
     }
-
-    else{
-
+    else {
         crash = Math.random() * 50 + 20;
-
     }
 
-
-    return Number(
-        crash.toFixed(2)
-    );
-
+    return Number(crash.toFixed(2));
 }
 
 
 
 
 
-export function getGameState(){
-
+export function getGameState() {
     return gameState;
-
 }
 
-
-
-export function getBets(){
-
+export function getBets() {
     return bets;
-
 }
 
-
-
-export function setBets(newBets){
-
+export function setBets(newBets) {
     bets = newBets;
-
 }
 
 
 
 
 
-function startEngine(socketIO){
-
+function startEngine(socketIO) {
     io = socketIO;
-
     runWaitingPhase();
-
 }
 
 
 
 
 
-function emitState(){
+function emitState() {
 
-    io.emit(
-        "gameState",
-        gameState
-    );
+    io.emit("gameState", { ...gameState });
 
-
-    io.emit(
-        "betsUpdate",
-        bets
-    );
-
+    io.emit("betsUpdate", { ...bets });
 }
 
 
 
 
 
-function runWaitingPhase(){
-
+function runWaitingPhase() {
 
     winners = [];
-
-
-    io.emit(
-        "winnersUpdate",
-        winners
-    );
-
+    io.emit("winnersUpdate", []);
 
     bets = {};
-
-
-    io.emit(
-        "betsUpdate",
-        bets
-    );
-
-
+    io.emit("betsUpdate", {});
 
     gameState.status = "waiting";
-
     gameState.countdown = 5;
-
     gameState.multiplier = 1;
 
-
-
-    gameState.crashPoint =
-        randomCrashPoint();
-
-
+    gameState.crashPoint = randomCrashPoint();
 
     emitState();
 
-
-
-    const waitingInterval = setInterval(()=>{
-
+    const waitingInterval = setInterval(() => {
 
         gameState.countdown--;
 
-
         emitState();
 
-
-
-        if(gameState.countdown <= 0){
-
+        if (gameState.countdown <= 0) {
 
             clearInterval(waitingInterval);
 
-
             runFlyingPhase();
-
         }
 
-
-    },1000);
-
+    }, 1000);
 }
 
 
 
 
 
-function runFlyingPhase(){
-
+function runFlyingPhase() {
 
     gameState.status = "flying";
 
-
     emitState();
 
-
-
-    const flyInterval = setInterval(()=>{
-
+    const flyInterval = setInterval(() => {
 
         gameState.multiplier += 0.05;
 
-
         gameState.multiplier =
-            Number(
-                gameState.multiplier.toFixed(2)
-            );
-
-
+            Number(gameState.multiplier.toFixed(2));
 
         emitState();
 
-
-
-        if(
-            gameState.multiplier >= gameState.crashPoint
-        ){
-
+        if (gameState.multiplier >= gameState.crashPoint) {
 
             clearInterval(flyInterval);
-
-
 
             gameState.status = "crashed";
 
 
-
-            // SAVE REAL CRASH VALUE
-            history.unshift(
-                Number(
-                    gameState.multiplier.toFixed(2)
-                )
+            // ✅ SAVE REAL CRASH (FIXED)
+            const crashValue = Number(
+                gameState.crashPoint.toFixed(2)
             );
 
+            history.unshift(crashValue);
 
 
-            // KEEP ONLY 20
-            if(history.length > 20){
-
+            // KEEP ONLY LAST 20
+            if (history.length > 20) {
                 history.splice(20);
-
             }
 
 
-
-            // UPDATE HISTORY IMMEDIATELY
-            io.emit(
-                "historyUpdate",
-                [...history]
-            );
-
+            // ✅ SEND HISTORY IMMEDIATELY (FIXED)
+            io.emit("historyUpdate", [...history]);
 
 
             emitState();
 
 
-
             generateFakeWinners();
 
 
-
-            setTimeout(()=>{
-
+            setTimeout(() => {
 
                 gameState.roundId++;
 
-
                 runWaitingPhase();
 
-
-            },3000);
-
-
+            }, 3000);
         }
 
-
-    },40);
-
+    }, 40);
 }
 
 
@@ -432,11 +256,8 @@ function runFlyingPhase(){
 
 
 export {
-
     history,
     winners
-
 };
-
 
 export default startEngine;
