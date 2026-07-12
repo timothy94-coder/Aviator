@@ -49,7 +49,6 @@ function generateFakeWinners() {
             Math.floor(Math.random() * 500) + 50;
 
 
-
         roundWinners.push({
 
             userId:
@@ -87,6 +86,7 @@ function generateFakeWinners() {
 
 
 
+
 let scheduledEvents = [
 
     {
@@ -110,6 +110,7 @@ let scheduledEvents = [
 
 
 let forcedCrashPoints = [];
+
 
 
 
@@ -144,6 +145,7 @@ function checkScheduledRounds(){
     }
 
 }
+
 
 
 
@@ -276,7 +278,6 @@ function runWaitingPhase(){
     );
 
 
-
     bets = {};
 
 
@@ -292,6 +293,7 @@ function runWaitingPhase(){
     gameState.countdown = 5;
 
     gameState.multiplier = 1;
+
 
 
     gameState.crashPoint =
@@ -372,22 +374,25 @@ function runFlyingPhase(){
 
 
 
+            // SAVE REAL CRASH VALUE
             history.unshift(
                 Number(
-                    gameState.crashPoint.toFixed(2)
+                    gameState.multiplier.toFixed(2)
                 )
             );
 
 
 
+            // KEEP ONLY 20
             if(history.length > 20){
 
-                history.pop();
+                history.splice(20);
 
             }
 
 
 
+            // UPDATE HISTORY IMMEDIATELY
             io.emit(
                 "historyUpdate",
                 [...history]
