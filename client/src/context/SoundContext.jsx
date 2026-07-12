@@ -13,10 +13,9 @@ const SoundContext = createContext(null);
 export function SoundProvider({ children }) {
 
 
-  const [soundOn, setSoundOn] = useState(false);
+const [soundOn, setSoundOn] = useState(true);
 
-
-  const soundState = useRef(false);
+const soundState = useRef(true);
 
 
   const aviatorRef = useRef(null);
