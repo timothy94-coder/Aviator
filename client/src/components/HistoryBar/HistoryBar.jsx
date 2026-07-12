@@ -18,7 +18,7 @@ function HistoryBar() {
             {history?.map((item, index) => (
 
                 <div
-                    key={index}
+                    key={`${item}-${index}`} // ✅ FIXED KEY
                     className={`history-chip ${getColor(item)}`}
                 >
                     {Number(item).toFixed(2)}x
