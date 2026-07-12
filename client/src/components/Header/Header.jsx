@@ -852,126 +852,117 @@ Close
 
 
             {/* LOGIN / SIGNUP MODAL */}
+{showLogin && (
 
-            {showLogin && (
-
-                <div className="simple-modal">
-
-
-                    <div className="modal-box">
+<div className="auth-overlay">
 
 
-                        <h3>
-                            {isSignup ? "Create Account" : "Login"}
-                        </h3>
+    <div className="auth-card">
 
 
-<input
-    type="tel"
-    placeholder="Phone number (07xxxxxxxx)"
-    value={phone}
-    onChange={(e)=>setPhone(e.target.value)}
-/>
+        <img
+            src="/logo.png"
+            className="auth-logo"
+            alt="Aviatorway"
+        />
 
 
 
+        <h2>
+            Welcome to Aviatorway
+        </h2>
 
 
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e)=>setPassword(e.target.value)}
-                        />
-
-
-
+        <p className="auth-subtitle">
+            Create your account and start flying
+        </p>
 
 
 
-                        {loginError && (
-
-                            <p style={{color:"red"}}>
-
-                                {loginError}
-
-                            </p>
-
-                        )}
+        <input
+            type="tel"
+            placeholder="Phone number (07xxxxxxxx)"
+            value={phone}
+            onChange={(e)=>setPhone(e.target.value)}
+        />
 
 
 
+        <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
+        />
 
 
 
-                        <button
-                            onClick={isSignup ? signup : login}
-                            disabled={loading}
-                        >
-
-                            {
-                                loading
-                                ? "Please wait..."
-                                : isSignup
-                                ? "Create Account"
-                                : "Login"
-                            }
-
-
-                        </button>
+        {loginError && (
+            <p className="auth-error">
+                {loginError}
+            </p>
+        )}
 
 
 
+        <button
+            className="auth-main-btn"
+            onClick={isSignup ? signup : login}
+            disabled={loading}
+        >
 
+        {
+            loading
+            ? "Please wait..."
+            :
+            isSignup
+            ? "Create Account"
+            : "Login"
+        }
 
-
-
-                        <button
-                            onClick={() => {
-
-                                setIsSignup(!isSignup);
-                                setLoginError("");
-
-                            }}
-                        >
-
-                            {
-                                isSignup
-                                ? "Already have account? Login"
-                                : "Create new account"
-                            }
-
-
-                        </button>
+        </button>
 
 
 
 
+        <button
+            className="auth-switch"
+            onClick={()=>{
+                setIsSignup(!isSignup);
+                setLoginError("");
+            }}
+        >
+
+        {
+            isSignup
+            ?
+            "Already have an account? Login"
+            :
+            "New player? Create account"
+        }
+
+        </button>
 
 
 
-                        <button
-                            onClick={() => {
-
-                                setShowLogin(false);
-                                setLoginError("");
-
-                            }}
-                        >
-
-                            Close
-
-                        </button>
+        <button
+            className="auth-close"
+            onClick={()=>{
+                setShowLogin(false);
+                setLoginError("");
+            }}
+        >
+            Continue as Guest
+        </button>
 
 
 
-                    </div>
+    </div>
 
 
-                </div>
+</div>
 
-            )}
-
+)}
 
 
 
