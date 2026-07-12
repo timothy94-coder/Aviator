@@ -13,32 +13,25 @@ function HistoryBar() {
     const { history } = useGame();
     const barRef = useRef(null);
 
-    // ✅ AUTO SCROLL TO RIGHT (NEWEST)
+    // ✅ AUTO SCROLL TO LATEST (LEFT SIDE)
     useEffect(() => {
         if (barRef.current) {
-            barRef.current.scrollLeft = barRef.current.scrollWidth;
+            barRef.current.scrollLeft = 0;
         }
     }, [history]);
 
     return (
-
         <div className="history-bar" ref={barRef}>
-
             {history?.map((item, index) => (
-
                 <div
                     key={`${item}-${index}`}
                     className={`history-chip ${getColor(item)}`}
                 >
                     {Number(item).toFixed(2)}x
                 </div>
-
             ))}
-
         </div>
-
     );
-
 }
 
 export default HistoryBar;
