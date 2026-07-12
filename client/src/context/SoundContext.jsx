@@ -121,7 +121,9 @@ const soundState = useRef(true);
 
 
 
-  const playEngine = () => {
+  const playEngine = async () => {
+
+    console.log("playEngine called:", soundState.current);
 
 
     if(!soundState.current) return;
@@ -135,31 +137,30 @@ const soundState = useRef(true);
 
 
     audio.loop = true;
-
     audio.volume = 1;
 
 
 
-    if(audio.paused){
+    try {
 
+        if(audio.paused){
 
-      audio.play()
+            await audio.play();
 
-      .catch(err=>{
+            console.log("Engine playing");
+
+        }
+
+    } catch(err){
 
         console.log(
-          "Engine blocked:",
-          err
+            "Engine blocked:",
+            err
         );
-
-      });
-
 
     }
 
-
-  };
-
+};
 
 
 
