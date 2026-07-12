@@ -32,7 +32,15 @@ useEffect(() => {
     setGame(data);
     setGameReady(true); // ✅ ADD THIS LINE
 });
-    socket.on("historyUpdate", setHistory);
+    socket.on("historyUpdate", (data) => {
+
+    if(Array.isArray(data)){
+
+        setHistory([...data]);
+
+    }
+
+});
     socket.on("betsUpdate", setBets);
     socket.on("winnersUpdate", setWinners);
 
