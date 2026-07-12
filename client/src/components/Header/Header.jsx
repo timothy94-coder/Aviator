@@ -5,6 +5,7 @@ import DepositModal from "../DepositModal/DepositModal";
 import { useSound } from "../../context/SoundContext";
 import { useAuth } from "../../hooks/useAuth";
 import { signIn, signUp, signOut } from "../../lib/auth";
+import { getUser } from "../../lib/auth";
 
 
 function Header() {
@@ -27,7 +28,7 @@ const [withdrawPhone, setWithdrawPhone] = useState("");
 
 
     // AUTH STATES
-    const [isSignup, setIsSignup] = useState(false);
+    const [isSignup, setIsSignup] = useState(true);
 const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
@@ -64,6 +65,20 @@ const [phone, setPhone] = useState("");
 
 
     }, []);
+
+    useEffect(() => {
+
+    const existingUser = getUser();
+
+
+    if(!existingUser){
+
+        setShowLogin(true);
+
+    }
+
+
+}, []);
 
 
 
