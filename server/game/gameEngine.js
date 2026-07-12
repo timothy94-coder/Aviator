@@ -499,30 +499,25 @@ function runFlyingPhase(){
 
 
             history.unshift(
-                gameState.crashPoint
-            );
+    Number(gameState.crashPoint.toFixed(2))
+);
 
 
+if(history.length > 20){
 
-            if(history.length > 20){
+    history.pop();
 
-                history.pop();
-
-            }
-
+}
 
 
-
-            emitState();
-
-
-
-            io.emit(
-                "historyUpdate",
-                history
-            );
+// SEND HISTORY FIRST
+io.emit(
+    "historyUpdate",
+    [...history]
+);
 
 
+emitState();
 
             generateFakeWinners();
 
