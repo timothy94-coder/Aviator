@@ -1,5 +1,6 @@
 import "./HistoryBar.css";
 import { useGame } from "../../context/GameContext";
+import { useEffect, useRef } from "react";
 
 function getColor(value) {
     if (value < 2) return "red";
@@ -10,12 +11,20 @@ function getColor(value) {
 function HistoryBar() {
 
     const { history } = useGame();
+    const barRef = useRef(null);
+
+    // ✅ AUTO SCROLL TO RIGHT (NEWEST)
+    useEffect(() => {
+        if (barRef.current) {
+            barRef.current.scrollLeft = barRef.current.scrollWidth;
+        }
+    }, [history]);
 
     return (
 
-        <div className="history-bar">
+        <div className="history-bar" ref={barRef}>
 
-            {[...history].reverse().map((item, index) => (
+            {history?.map((item, index) => (
 
                 <div
                     key={`${item}-${index}`}
