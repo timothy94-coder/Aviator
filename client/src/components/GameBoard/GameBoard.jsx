@@ -12,22 +12,36 @@ function GameBoard() {
     const { game, gameReady } = useGame();
     const { playEngine, stopEngine, playCrash } = useSound();
 
-     useEffect(() => {
+    useEffect(() => {
 
-        if (game.status === "flying") {
-            playEngine();
-        }
 
-        if (game.status === "crashed") {
-            stopEngine();
-            playCrash();
-        }
+    console.log("Game sound status:", game.status);
 
-        if (game.status === "waiting") {
-            stopEngine();
-        }
 
-}, [game.status, game.roundId]);
+    if (game.status === "flying") {
+
+        playEngine();
+
+    }
+
+
+    if (game.status === "crashed") {
+
+        stopEngine();
+
+        playCrash();
+
+    }
+
+
+    if (game.status === "waiting") {
+
+        stopEngine();
+
+    }
+
+
+}, [game.status]);
 
     return (
 <div className="game-board">
