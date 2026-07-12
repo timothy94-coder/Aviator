@@ -12,6 +12,7 @@ margin-bottom:1px;
 
 scrollbar-width:none;
     justify-content: flex-start;
+    scroll-behavior: auto;
 
 }
 
