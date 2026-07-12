@@ -28,7 +28,10 @@ useEffect(() => {
 
     socket.on("connect", onConnect);
 
-    socket.on("gameState", setGame);
+    socket.on("gameState", (data) => {
+    setGame(data);
+    setGameReady(true); // ✅ ADD THIS LINE
+});
     socket.on("historyUpdate", setHistory);
     socket.on("betsUpdate", setBets);
     socket.on("winnersUpdate", setWinners);
@@ -49,7 +52,8 @@ useEffect(() => {
             history,
             bets,
             cashouts,
-            winners
+            winners,
+            gameReady
         }}>
             {children}
         </GameContext.Provider>
