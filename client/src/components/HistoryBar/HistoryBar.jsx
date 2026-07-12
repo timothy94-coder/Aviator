@@ -11,17 +11,20 @@ function HistoryBar() {
 
     const { history } = useGame();
 
+
     return (
 
         <div className="history-bar">
 
-            {history?.map((item, index) => (
+            {[...history].map((item, index) => (
 
                 <div
-                    key={`${item}-${index}`} // ✅ FIXED KEY
-                    className={`history-chip ${getColor(item)}`}
+                    key={`${item}-${index}`}
+                    className={`history-chip ${getColor(Number(item))}`}
                 >
+
                     {Number(item).toFixed(2)}x
+
                 </div>
 
             ))}
