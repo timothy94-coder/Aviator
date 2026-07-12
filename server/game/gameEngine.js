@@ -422,117 +422,51 @@ function runWaitingPhase(){
         ){
 
 
-            clearInterval(
-                waitingInterval
-            );
+           // ================= CRASH HANDLING =================
+
+clearInterval(flyInterval);
 
 
-            runFlyingPhase();
+gameState.status = "crashed";
 
 
-        }
-
-
-    },1000);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function runFlyingPhase(){
-
-
-    gameState.status =
-        "flying";
-
-
-    emitState();
-
-
-
-    const flyInterval =
-    setInterval(()=>{
-
-
-
-        gameState.multiplier += 0.05;
-
-
-
-        gameState.multiplier =
-            Number(
-                gameState.multiplier.toFixed(2)
-            );
-
-
-
-        emitState();
-
-
-
-
-
-        if(
-            gameState.multiplier >=
-            gameState.crashPoint
-        ){
-
-
-
-            clearInterval(
-                flyInterval
-            );
-
-
-
-            gameState.status =
-                "crashed";
-
-
-
-            history.unshift(
-    Number(gameState.crashPoint.toFixed(2))
+// Add latest crash to history
+const crashedMultiplier = Number(
+    gameState.crashPoint.toFixed(2)
 );
 
 
-if(history.length > 20){
+history.unshift(crashedMultiplier);
 
-    history.pop();
 
+// Keep only latest 20 rounds
+if (history.length > 20) {
+    history = history.slice(0, 20);
 }
 
 
-// SEND HISTORY FIRST
+// Send history immediately
 io.emit(
     "historyUpdate",
     [...history]
 );
 
 
+// Send crashed game state
 emitState();
 
-            generateFakeWinners();
+
+// Generate winners
+generateFakeWinners();
 
 
-            setTimeout(()=>{
+setTimeout(() => {
 
+    gameState.roundId++;
 
-                gameState.roundId++;
+    runWaitingPhase();
 
-
-                runWaitingPhase();
-
-
-            },3000);
-
+}, 3000);
 
         }
 
