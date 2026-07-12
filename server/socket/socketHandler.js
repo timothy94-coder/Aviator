@@ -26,7 +26,19 @@ export default function socketHandler(io) {
 
         console.log(`Player Connected: ${socket.id}`);
 
-        // ✅ SEND CURRENT STATE IMMEDIATELY
+
+        // ✅ HANDLE INITIAL STATE REQUEST (🔥 THIS WAS MISSING)
+        socket.on("requestInitialState", () => {
+
+            socket.emit("gameState", getGameState());
+            socket.emit("betsUpdate", getBets());
+            socket.emit("historyUpdate", history);
+            socket.emit("winnersUpdate", winners);
+
+        });
+
+
+        // ✅ ALSO SEND IMMEDIATELY (backup, works even without request)
         socket.emit("gameState", getGameState());
         socket.emit("betsUpdate", getBets());
         socket.emit("historyUpdate", history);
