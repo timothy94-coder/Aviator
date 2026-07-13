@@ -95,9 +95,9 @@ let scheduledEvents = [
             ),
 
         rounds:[
-            54,
-            63,
-            72,
+            64,
+            61,
+            82,
             5
         ],
 
