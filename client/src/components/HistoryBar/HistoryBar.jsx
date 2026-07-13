@@ -13,13 +13,10 @@ function HistoryBar() {
     const { history } = useGame();
     const barRef = useRef(null);
 
-    // ✅ ALWAYS SHOW LATEST (LEFT SIDE)
+    // ✅ ALWAYS SHOW LATEST ITEM (RIGHT EDGE)
     useEffect(() => {
         if (barRef.current) {
-            barRef.current.scrollTo({
-                left: 0,
-                behavior: "instant" // no animation = no lag
-            });
+            barRef.current.scrollLeft = barRef.current.scrollWidth;
         }
     }, [history]);
 
