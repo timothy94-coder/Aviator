@@ -11,7 +11,7 @@ function HistoryBar() {
   const { history } = useGame();
 
   // Limit to last 20 items
-  const limitedHistory = history?.slice(-8);
+  const limitedHistory = history?.slice(-4);
 
   return (
     <div className="history-bar">
