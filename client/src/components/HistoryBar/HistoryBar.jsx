@@ -10,9 +10,12 @@ function getColor(value) {
 function HistoryBar() {
   const { history } = useGame();
 
+  // Limit to last 20 items
+  const limitedHistory = history?.slice(-8);
+
   return (
     <div className="history-bar">
-      {history?.map((item, index) => (
+      {limitedHistory?.map((item, index) => (
         <div
           key={`${item}-${index}`}
           className={`history-chip ${getColor(item)}`}
