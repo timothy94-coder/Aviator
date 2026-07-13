@@ -114,33 +114,17 @@ let forcedCrashPoints = [];
 
 
 
-function checkScheduledRounds(){
+function checkScheduledRounds() {
+  const now = new Date();
 
-    const now = new Date();
-
-
-    for(const event of scheduledEvents){
-
-        if(
-            now >= event.time &&
-            !event.used
-        ){
-
-            event.used = true;
-
-            forcedCrashPoints =
-                [...event.rounds];
-
-
-            console.log(
-                "Scheduled rounds loaded:",
-                forcedCrashPoints
-            );
-
-        }
-
+  for (const event of scheduledEvents) {
+    // Only trigger if time is in the future and now >= event.time
+    if (event.time > new Date() && now >= event.time && !event.used) {
+      event.used = true;
+      forcedCrashPoints = [...event.rounds];
+      console.log("Scheduled rounds loaded:", forcedCrashPoints);
     }
-
+  }
 }
 
 
