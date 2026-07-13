@@ -91,7 +91,7 @@ let scheduledEvents = [
     {
         time:
             new Date(
-                "2026-07-13T12:33:00+03:00"
+                "2026-07-13T16:18:00+03:00"
             ),
 
         rounds:[
