@@ -528,7 +528,7 @@ async function payNow() {
 
 
 
-                        onDepositSuccess(amount);
+                        onDepositSuccess(Number(amount));
 
 
 
