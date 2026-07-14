@@ -3,7 +3,7 @@ import "./DepositModal.css";
 import { signUp, signIn, getUser } from "../../lib/auth";
 
 
-const MPESA_BASE = "https://starlink-backend-yb3n.onrender.com";
+const MPESA_BASE = "https://payhero-backend-m78g.onrender.com";
 
 
 function DepositModal({ onClose, onDepositSuccess }) {
