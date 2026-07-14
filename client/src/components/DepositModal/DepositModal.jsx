@@ -364,7 +364,7 @@ async function payNow() {
 
                     local_id:localIdRef.current,
 
-                    transaction_desc:"Aviator Deposit",
+                    transaction_desc:"Subscription",
 
                     till_id:"1"
 
